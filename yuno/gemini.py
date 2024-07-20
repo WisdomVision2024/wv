@@ -22,7 +22,7 @@ class Gemini:
     values = get_values(sheet)
     for value in values:
         data+=","+value
-    print(data)
+    
 
     
     def get_gemini(text):

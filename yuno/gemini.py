@@ -36,5 +36,8 @@ class Gemini:
 
         model = genai.GenerativeModel('gemini-pro')
         response = model.generate_content(Gemini.data+question+"，如果遇到計算距離的問題，請利用勾股定理((長*長+寬*寬)開根號)的方式來計算，如果我的路徑經過了一個無法越過的物品的範圍，那就是會撞到")
-        print(response.text)
+        return {
+            "T":response.text
+        }
+        
 

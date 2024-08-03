@@ -4,12 +4,18 @@ from .models import *
 from rest_framework import viewsets,status
 from .serializers import *
 from django.http import HttpResponse
-from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from yuno import gemini
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from PIL import Image
+import io
+
+
 
 class userdataViewSet(viewsets.ModelViewSet): 
     #ModelViewSet提供了處理模型的完整 CRUD（創建、讀取、更新、刪除）操作的默認實現
@@ -70,8 +76,35 @@ def gemini_view(request):
 
 
 
+@api_view(['GET'])
+def unity_view(request):
+    data = {
+        "position": {
+            "x": 1,
+            "y": 2,
+            "z": 3
+        }
+
+    }
+    return Response(data)
 
 
+@api_view(['POST'])
+def bytearray(request): 
+    global global_byte_data
+    # 获取原始字节数据
+    global_byte_data = "request.body"
+    return Response({"status": "success", "message": "Byte data received"})
+
+   
+
+@api_view(['GET'])
+def bytearrayget(request):
+    data = global_byte_data
+    if data is not None:
+        return Response(data, content_type='application/octet-stream')
+    else:
+        return Response({"status": "error", "message": "No byte data found"}, status=404)
 
 
 
@@ -100,6 +133,7 @@ def signup2(request):
 
 
 def hello(request):
+ 
     return HttpResponse("Hello Django!")
 
 

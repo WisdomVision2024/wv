@@ -31,6 +31,9 @@ urlpatterns = [
     path('login/', views.login_view),
     path('signup/',views.register_view),
     path('gemini/',views.gemini_view),
+    path('unity/',views.unity_view),
+    path('bytearray/',views.bytearray),
+    path('bytearrayget/',views.bytearrayget),
 
 
     path('login1/',views.login1),

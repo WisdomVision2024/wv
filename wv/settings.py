@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-&)b1s5#t$(9lf269cufwdj8l=$r3ts0w+vyjhx^axjqb_-shg$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['163.13.201.104']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -117,6 +117,9 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600 
 
 
 # Static files (CSS, JavaScript, Images)

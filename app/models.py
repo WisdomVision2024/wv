@@ -12,4 +12,3 @@ class userdata(models.Model):
         return self.Name
 
 
-

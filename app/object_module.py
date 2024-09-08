@@ -103,7 +103,7 @@ class ObjectDetection:
         cv2.waitKey(3000)
         cv2.destroyAllWindows()
 
-    def start_socket_server(self, host='localhost', port=8002):
+    def start_socket_server(self, host='localhost', port=6666):
         # 創建 TCP 套接字
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

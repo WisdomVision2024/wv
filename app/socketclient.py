@@ -30,7 +30,7 @@ def sock1(data):
     client_socket.setblocking(False)  # 設置為非阻塞模式
     try:
         # 嘗試連接到服務器，使用 connect_ex 以避免阻塞
-        client_socket.connect_ex(('localhost', 8002))
+        client_socket.connect_ex(('localhost', 6666))
     except BlockingIOError:
         # 忽略非阻塞模式下的異常
         pass

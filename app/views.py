@@ -111,21 +111,10 @@ def continue_view(request):
             data += b'EOF'
             print(f"Size of encoded image data: {len(data)} bytes")
             
-            
-            # logging.debug(r1)
-            # try:
-            #     d1 = json.loads(r1)
-            #     logging.debug(f"Parsed JSON data: {d1}")
-            #     return JsonResponse({"status": "success", "data": d1})
-            # except json.JSONDecodeError:
-            #     logging.error("Received non-JSON response")
-            #     return JsonResponse({"status": "success", "message": r1})
             r1 = socketclient.sock1(data)
             r2 = socketclient.sock2(data)
-            d1 = json.loads(r1)
-            d2 = json.loads(r2)
-           
-            result = d1+d2
+
+            result = r1+r2
 
             return JsonResponse({"status": "success","message":result},status=200)
 

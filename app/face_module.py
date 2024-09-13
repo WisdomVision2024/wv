@@ -85,7 +85,7 @@ class ObjectDetection:
         # 輸出 JSON 格式的結果
         return json.dumps(results, indent=4)
 
-    def start_socket_server(self, host='localhost', port=4445):
+    def start_socket_server(self, host='localhost', port=5555):
         # 創建 TCP 套接字
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # 綁定主機和端口
@@ -148,9 +148,10 @@ class ObjectDetection:
                                 face_results = ObjectDetection().face(frame)
                                 # 將結果發送到語音模型
                                 self.send_to_speech_model(face_results)
-                                F_c = face_continue.facecon(face_results)
+                                logging.debug(face_results)
+                                # F_c = face_continue.facecon(face_results)
                                 
-                                notified_socket.sendall(F_c.encode('utf-8'))
+                                notified_socket.sendall(face_results.encode('utf-8'))
 
                             # 清除已處理的客戶端數據
                             sockets_list.remove(notified_socket)

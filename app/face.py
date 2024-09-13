@@ -6,8 +6,8 @@ import logging
 logging.basicConfig(format='%(asctime)s - %(message)s - [%(funcName)s:%(lineno)d]', level=logging.DEBUG)
 
 
-def face(data):
-    input_data = json.loads(data)
+def face(input_data):
+   
     item_counts = {
         "Huang": 0,
         "Irene": 0,
@@ -17,11 +17,11 @@ def face(data):
     # 確保 input_data 是可迭代的
     for item in input_data:
         if isinstance(item, dict):
-            if item["name"] == "Huang" and item["confidence"] > 0.5:
+            if item["name"] == "Huang" and item["confidence"] > 0.1:
                 item_counts["Huang"] += 1
-            elif item["name"] == "Irene" and item["confidence"] > 0.5:
+            elif item["name"] == "Irene" and item["confidence"] > 0.1:
                 item_counts["Irene"] += 1
-            elif item["name"] == "Paney" and item["confidence"] > 0.5:
+            elif item["name"] == "Paney" and item["confidence"] > 0.1:
                 item_counts["Paney"] += 1
     
     # 只保留數量大於 0 的項目

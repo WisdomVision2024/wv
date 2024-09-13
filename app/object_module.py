@@ -103,7 +103,7 @@ class ObjectDetection:
         cv2.waitKey(3000)
         cv2.destroyAllWindows()
 
-    def start_socket_server(self, host='localhost', port=6666):
+    def start_socket_server(self, host='localhost', port=4444):
         # 創建 TCP 套接字
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -155,10 +155,10 @@ class ObjectDetection:
                                 self.send_to_speech_model(object_results)
 
                                 #結果送至object_continue
-                                O_c = object_continue.con(object_results)
-
+                                # O_c = object_continue.con(object_results)
+                                logging.debug(object_results)
                                 # 將語音模型結果回傳給客戶端
-                                notified_socket.sendall(O_c.encode('utf-8'))
+                                notified_socket.sendall(object_results.encode('utf-8'))
 
                             # 清除已處理的客戶端數據
                             sockets_list.remove(notified_socket)

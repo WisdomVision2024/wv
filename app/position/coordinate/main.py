@@ -5,18 +5,59 @@ import json
 import select
 import socket
 import numpy as np
+import app.question_input as question_input
+import logging
 
+# 設定 logging 格式
+logging.basicConfig(format='%(asctime)s - %(message)s - [%(funcName)s:%(lineno)d]', level=logging.DEBUG)
 class ObjectDetection:
 
+    # # 定義座標字典
+    # coordinates = {
+    #     'A': (46.5, 0), 'B': (46.5, 70), 'C': (46.5, 140), 'D': (46.5, 210), 'E': (46.5, 280),
+    #     'F': (46.5, 350), 'L': (46.5, 400), 'Q': (116.5, 400), 'P': (186.5, 400), 'K': (256.5, 400),
+    #     'U': (326.5, 400), 'V': (396.5, 400), 'W': (466.5, 400), 'X': (536.5, 400), 'Y': (606.5, 400),
+    #     'Z': (668.5, 400), 'e': (668.5, 350), 'h': (668.5, 280), 'm': (668.5, 210), 'n': (668.5, 140),
+    #     'g': (676.5, 55), 't': (606.5, 55), 'y': (536.5, 55), 'lungu': (466.5, 55), 'duomianti': (396.5, 55),
+    #     'r': (326.5, 55), 'yuanzhu': (256.5, 55), 'yuanzhui': (186.5, 55), '4': (116.5, 55)
+    # }
+    
     # 定義座標字典
     coordinates = {
-        'A': (46.5, 0), 'B': (46.5, 70), 'C': (46.5, 140), 'D': (46.5, 210), 'E': (46.5, 280),
-        'F': (46.5, 350), 'L': (46.5, 400), 'Q': (116.5, 400), 'P': (186.5, 400), 'K': (256.5, 400),
-        'U': (326.5, 400), 'V': (396.5, 400), 'W': (466.5, 400), 'X': (536.5, 400), 'Y': (606.5, 400),
-        'Z': (668.5, 400), 'e': (668.5, 350), 'h': (668.5, 280), 'm': (668.5, 210), 'n': (668.5, 140),
-        'g': (676.5, 55), 't': (606.5, 55), 'y': (536.5, 55), 'lungu': (466.5, 55), 'duomianti': (396.5, 55),
-        'r': (326.5, 55), 'yuanzhu': (256.5, 55), 'yuanzhui': (186.5, 55), '4': (116.5, 55)
+        'A':(403.0,1.81,63.0),
+        'B':(418.0,1.81,63.0),
+        'C':(433.0,1.81,63.0),
+        'D':(448.0, 1.81, 63.0), 
+        'E':(463.0, 1.81, 63.0),
+        'F':(478.0, 1.81, 63.0),
+        'L': (493.0, 1.81, 63.0), 
+        'Q': (508.0, 1.81, 63.0) , 
+        'P': (523.0, 1.81, 63.0) , 
+        'K': (538.0, 1.81, 63.0) ,
+        'U': (538.0, 1.81, 48.2) , 
+        'V': (538.0, 1.81, 33.4), 
+        'W': (538.0, 1.81, 18.6), 
+        'X': (538.0, 1.81, 3.8) ,
+        'Y': (538.0, 1.81, -11.0),
+        'Z': (523.0, 1.81, -11.0), 
+        'e': (508.0, 1.81, -11.0), 
+        'h': (493.0, 1.81, -11.0), 
+        'm': (478.0, 1.81, -11.0), 
+        'n': (463.0, 1.81, -11.0),
+        'g': (448.0, 1.81, -11.0), 
+        't': (433.0, 1.81, -11.0), 
+        'y': (418.0, 1.81, -11.0), 
+        'lungu': (403.0, 1.81, -11.0), 
+        'duomianti': (403.0, 1.81, 3.8),
+        'r': (403.0, 1.81, 18.6), 
+        'yuanzhu': (403.0, 1.81, 33.4), 
+        'yuanzhui': (403.0, 1.81, 48.2), 
+        '4': (403.0, 1.81, 63.0)
     }
+
+
+
+
     def __init__(self):
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("Using Device: ", self.device)
@@ -30,7 +71,6 @@ class ObjectDetection:
         return model
 
     def position(self, frame):
-      
         # 使用模型進行推論
         results = self.model(frame)
 
@@ -52,18 +92,23 @@ class ObjectDetection:
                 label_id = int(box.cls[0])  # 取得標籤ID
                 label_name = names.get(label_id, "Unknown")  # 取得標籤名稱
                 coordinate = self.coordinates.get(label_name)  # 根據標籤名稱取得座標
-                
+
+                # 確認座標是否存在
+                if coordinate is None:
+                    print(f"Warning: No coordinates found for label '{label_name}'")
+                    continue  # 跳過沒有座標的標籤
+                 
                 # 將結果加入 JSON 列表
                 re.append({
-                    # "name":label_name,
-                    "x":coordinate[0],
-                    "y":coordinate[1],
+                    "x": coordinate[0],
+                    "y": coordinate[1],
+                    "z": coordinate[2],
                 })
-
-                # 輸出 JSON 格式的結果
+        logging.debug(json.dumps(re, indent=4))
+                   # 輸出 JSON 格式的結果
         return json.dumps(re, indent=4)
     
-    def start_socket_server(self, host='localhost', port=8003):
+    def start_socket_server(self, host='localhost', port=6666):
         # 創建 TCP 套接字
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -112,10 +157,11 @@ class ObjectDetection:
                                 # 使用 ObjectDetection 類別進行預測
                                 objectface_results = self.position(frame)
                                 # 將結果發送到語音模型
-                                speech_result =  objectface_results
+                  
+                                self.send_to_speech_model(objectface_results)
 
                                 # 將語音模型結果回傳給客戶端
-                                notified_socket.sendall(speech_result.encode('utf-8'))
+                                notified_socket.sendall(objectface_results.encode('utf-8'))
                             # 清除已處理的客戶端數據
                             sockets_list.remove(notified_socket)
                             del clients[notified_socket]
@@ -136,10 +182,13 @@ class ObjectDetection:
                     del clients[notified_socket]
                 notified_socket.close()
 
-    def send_to_unity(self, data):
-        return data
+    # def send_to_unity(self, data):
+    #     return data
     
-
+    def send_to_speech_model(self, data):
+        # 將處理結果發送到語音模型
+        dec = question_input.Objection()
+        dec.img_point(data)
       
 if __name__ == '__main__':
     detector = ObjectDetection()

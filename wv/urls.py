@@ -30,6 +30,7 @@ urlpatterns = [
     path('',views.hello),
     path('login/', views.login_view),
     path('signup/',views.register_view),
+    path('update/',views.update_view),
     
     path('focus/',views.focus_view),
     path('continue/',views.continue_view),
@@ -37,10 +38,10 @@ urlpatterns = [
     path('object/',views.object_view),
 
     path('help/',views.help_view),
-    path('unity/',views.unity_view),
+    path('unity/',views.unity_view,name='unity_view'),
     path('unity2/',views.unity2_view),
-    path('getunity/',views.get_unity),
-
+    path('getunity1/',views.get_unity1),
+    path('getunity2/',views.get_unity2),
 
 
 ]

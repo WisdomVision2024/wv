@@ -60,5 +60,52 @@ def register_user(cPhone,cPassword,cName,cEmail,cIdentity):
 
     user.save()
     return {"success": True, "errorMessage": "User created successfully"}
+
+
         
-    
+def update_account(Phone, newName, newEmail, oldPassword, newPassword):
+    try:
+        # 查找使用者
+        user = userdata.objects.get(Phone=Phone)
+        
+        # 更新帳號資訊
+        if newName:
+            user.Name = newName
+        if newEmail:
+            user.Email = newEmail
+
+        # 檢查舊密碼是否正確
+        if oldPassword and oldPassword != user.Password:
+            return {
+                "success": False,
+                "errorMessage": "舊密碼不正確"
+            }
+
+        # 更新密碼（如果有提供新密碼）
+        if newPassword:
+            user.Password = newPassword
+            user.save()  # 保存所有更新
+            
+            return {
+                "success": True,
+                "errorMessage": "帳號資訊與密碼更新成功",
+                "Phone": user.Phone,
+                "Name": user.Name,
+                "Email": user.Email,
+            }
+        else:
+            # 如果沒有提供新密碼，只更新帳號資訊
+            user.save()  # 保存帳號更新
+            return {
+                "success": True,
+                "errorMessage": "帳號資訊更新成功",
+                "Phone": user.Phone,
+                "Name": user.Name,
+                "Email": user.Email,
+            }
+
+    except userdata.DoesNotExist:
+        return {
+            "success": False,
+            "errorMessage": "帳號不存在"
+        }

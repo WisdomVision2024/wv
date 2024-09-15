@@ -45,9 +45,8 @@ class Objection:
         #標點類
         for keyword in keyworda:
             if keyword in self.distribution:
-                timeout = 20  # 設定超時時間為 20 秒
-                start_time = time.time()
-
+                timeout = 30  # 設定超時時間為 20 秒
+                start_time = time.time()            
 
                 while True:
                     try:
@@ -115,7 +114,7 @@ class Objection:
         #人物類
         for keyword in keywordc:
             if keyword in self.distribution:
-                timeout = 20  # 設定超時時間為 20 秒
+                timeout = 30  # 設定超時時間為 20 秒
                 start_time = time.time()
 
                 while True:

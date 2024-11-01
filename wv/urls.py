@@ -31,6 +31,7 @@ urlpatterns = [
     path('login/', views.login_view),
     path('signup/',views.register_view),
     path('update/',views.update_view),
+    path('updateimg/',views.update_image),
     
     path('focus/',views.focus_view),
     path('continue/',views.continue_view),

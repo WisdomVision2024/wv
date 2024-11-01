@@ -8,7 +8,7 @@ import logging
 df = pd.read_excel('/home/tkuim-sd/wv/environmentimfo.xlsx')
 
 def point(question,data):
-    if data is []:
+    if not data:
         return "辨識失敗，請再試一次"
     # 取出 x 和 y 的值
     x = data[0]['x']
@@ -21,7 +21,7 @@ def point(question,data):
         # 提取物件的 name 和 info
         name = result['name'].values[0]
         info = result['資訊'].values[0]
-        response = geminimodule.model.generate_content("使用者現在在"+name+"點，"+info+"。請根據以上資訊來回答使用者的問題，問題中的「我」代表使用者，請用您來稱呼使用者，請用完整句子來回答使用者，且回答中別帶有空格及特殊符號，使用者的問題:"+question)
+        response = geminimodule.model.generate_content("使用者現在在"+str(name)+"點，"+str(info)+"。請根據以上資訊來回答使用者的問題，問題中的「我」代表使用者，請用您來稱呼使用者，請用完整句子來回答使用者，且回答中別帶有空格及特殊符號，使用者的問題:"+question)
         ans = response.text
         return ans
     else:
